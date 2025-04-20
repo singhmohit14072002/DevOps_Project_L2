@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <nav class="main-nav">
+                <div class="logo">DevOps<span>Portfolio</span></div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                    <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="blog-container">
+        <div class="blog-header">
+            <h1 class="blog-title">DevOps Blog</h1>
+            <p>Share your thoughts and experiences in the world of DevOps</p>
+        </div>
+
+        <div class="blog-editor">
+            <h2 class="editor-title">Write a New Blog Post</h2>
+            <form class="blog-form" id="blogForm">
+                <div class="form-group">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" required placeholder="Enter your blog post title">
+                </div>
+                <div class="form-group">
+                    <label for="postImage">Featured Image URL</label>
+                    <input type="url" id="postImage" placeholder="https://example.com/image.jpg">
+                    <div class="image-suggestions">
+                        <p>Suggested Images:</p>
+                        <div class="suggested-images">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Cloud Infrastructure" onclick="setImage(this.src)">
+                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="CI/CD Pipeline" onclick="setImage(this.src)">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Monitoring System" onclick="setImage(this.src)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="postContent">Content</label>
+                    <textarea id="postContent" required placeholder="Write your blog post content here..."></textarea>
+                </div>
+                <button type="submit" class="publish-button">
+                    <i class="fas fa-paper-plane"></i> Publish Post
+                </button>
+            </form>
+        </div>
+
+        <div class="blog-posts" id="blogPosts">
+            <!-- Blog posts will be dynamically added here -->
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 DevOps Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Blog functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const blogForm = document.getElementById('blogForm');
+            const blogPosts = document.getElementById('blogPosts');
+            
+            // Load existing posts from localStorage
+            let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            
+            // Add some sample posts if none exist
+            if (posts.length === 0) {
+                posts = [
+                    {
+                        title: "Getting Started with Docker",
+                        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+                        content: "Docker has revolutionized the way we develop and deploy applications. In this post, we'll explore the basics of containerization and how Docker can streamline your development workflow.",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        title: "CI/CD Pipeline Best Practices",
+                        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+                        content: "Learn how to set up an efficient CI/CD pipeline using Jenkins and GitHub Actions. We'll cover best practices for automated testing, deployment, and monitoring.",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        title: "Cloud Infrastructure Management",
+                        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+                        content: "Explore the fundamentals of cloud infrastructure management with AWS and Azure. We'll discuss infrastructure as code, security best practices, and cost optimization.",
+                        date: new Date().toISOString()
+                    }
+                ];
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+            }
+            
+            // Display existing posts
+            function displayPosts() {
+                blogPosts.innerHTML = '';
+                posts.forEach((post, index) => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'blog-post';
+                    postElement.innerHTML = `
+                        <img src="${post.image || 'https://via.placeholder.com/350x250'}" alt="${post.title}" class="post-image">
+                        <div class="post-content">
+                            <h3 class="post-title">${post.title}</h3>
+                            <p class="post-excerpt">${post.content.substring(0, 150)}...</p>
+                            <div class="post-meta">
+                                <span><i class="far fa-calendar"></i> ${new Date(post.date).toLocaleDateString()}</span>
+                                <div class="post-actions">
+                                    <button class="action-button edit-button" onclick="editPost(${index})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-button delete-button" onclick="deletePost(${index})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    blogPosts.appendChild(postElement);
+                });
+            }
+
+            // Set image from suggestion
+            window.setImage = function(src) {
+                document.getElementById('postImage').value = src;
+            };
+
+            // Handle form submission
+            blogForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('postTitle').value;
+                const image = document.getElementById('postImage').value;
+                const content = document.getElementById('postContent').value;
+                
+                const newPost = {
+                    title,
+                    image,
+                    content,
+                    date: new Date().toISOString()
+                };
+                
+                posts.push(newPost);
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                
+                displayPosts();
+                blogForm.reset();
+                
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Post published successfully!';
+                blogForm.appendChild(successMessage);
+                
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            });
+
+            // Edit post function
+            window.editPost = function(index) {
+                const post = posts[index];
+                document.getElementById('postTitle').value = post.title;
+                document.getElementById('postImage').value = post.image;
+                document.getElementById('postContent').value = post.content;
+                
+                posts.splice(index, 1);
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                displayPosts();
+                
+                // Scroll to form
+                document.querySelector('.blog-editor').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // Delete post function
+            window.deletePost = function(index) {
+                if (confirm('Are you sure you want to delete this post?')) {
+                    posts.splice(index, 1);
+                    localStorage.setItem('blogPosts', JSON.stringify(posts));
+                    displayPosts();
+                }
+            };
+
+            // Initial display of posts
+            displayPosts();
+        });
+    </script>
+</body>
+</html> 
