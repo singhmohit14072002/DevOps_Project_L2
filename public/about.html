@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - DevOps Blog</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="blog.css">
+    
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="blog.html" class="logo"> <!-- Link back to blog home -->
+                    <span class="logo-text">DevOps</span>
+                    <span class="logo-highlight">Blog</span>
+                </a>
+                <div class="nav-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search posts..." id="searchInput" disabled> <!-- Disable search on this page -->
+                </div>
+                <ul class="nav-links">
+                    <li><a href="blog.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link active">About</a></li> <!-- Mark About as active -->
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li class="auth-buttons">
+                        <button class="auth-button signin-button" onclick="showAuthModal('signin')">Sign In</button>
+                        <button class="auth-button signup-button" onclick="showAuthModal('signup')">Sign Up</button>
+                    </li>
+                    <li class="user-profile" style="display: none;">
+                        <div class="user-menu">
+                            <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                            <span id="userName"></span>
+                            <div class="user-dropdown">
+                                <a href="blog.html" onclick="showUserPosts(); return false;">My Posts</a> <!-- Link back to blog page for My Posts -->
+                                <a href="#" onclick="signOut()">Sign Out</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="page-container">
+        <div class="container content-section">
+            <h1>About Us</h1>
+            <p>Welcome to the DevOps Blog!</p>
+            <p>This platform is dedicated to sharing knowledge, experiences, tutorials, and insights related to the world of DevOps, cloud computing, automation, and software development practices.</p>
+            <p>Our mission is to create a community where professionals and enthusiasts can learn from each other, discuss challenges, and explore the latest trends in the industry.</p>
+            <p>Whether you're a seasoned DevOps engineer, a cloud architect, a developer looking to improve workflows, or just curious about these fields, you'll find valuable content here.</p>
+            <p>Feel free to browse the posts, sign up to write your own articles, and engage with the community through comments.</p>
+        </div>
+    </main>
+
+    <!-- Auth Modal (Copied from blog.html for consistency) -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <h2 id="authModalTitle">Sign In</h2>
+            <form id="authForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name">
+                </div>
+                <button type="submit" id="authSubmit">Sign In</button>
+            </form>
+            <div class="auth-footer">
+                <p id="authToggle">Don't have an account? <a href="#" onclick="toggleAuthForm()">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Application Script (Needs auth functions) -->
+    <script src="blog.js"></script> 
+</body>
+</html> 
