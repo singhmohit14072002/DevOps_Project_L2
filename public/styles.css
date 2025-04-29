@@ -1581,4 +1581,44 @@ footer {
     .blog-post-title {
         font-size: 1.3rem;
     }
+}
+
+/* Floating DevOps Icons Background - More Visible */
+.floating-icons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+}
+.floating-icons i {
+    position: absolute;
+    font-size: 7rem;
+    color: #4fc3f7;
+    filter: drop-shadow(0 0 24px #1976d2) drop-shadow(0 0 48px #fff6) drop-shadow(0 0 32px #fff9);
+    opacity: 1;
+    animation: float-variant 16s infinite ease-in-out;
+    mix-blend-mode: lighten;
+    transition: filter 0.3s, color 0.3s;
+}
+.floating-icons i:nth-child(1) { left: 8vw;  top: 12vh;  animation-delay: 0s;  font-size: 8rem; color: #4fc3f7; }
+.floating-icons i:nth-child(2) { left: 75vw; top: 8vh;   animation-delay: 2s;  font-size: 7rem; color: #ffd600; }
+.floating-icons i:nth-child(3) { left: 20vw; top: 70vh;  animation-delay: 4s;  font-size: 9rem; color: #ff5252; }
+.floating-icons i:nth-child(4) { left: 85vw; top: 65vh;  animation-delay: 6s;  font-size: 7.5rem; color: #69f0ae; }
+.floating-icons i:nth-child(5) { left: 55vw; top: 35vh;  animation-delay: 8s;  font-size: 8.5rem; color: #b388ff; }
+.floating-icons i:nth-child(6) { left: 40vw; top: 15vh;  animation-delay: 3s;  font-size: 7.2rem; color: #1976d2; }
+.floating-icons i:nth-child(7) { left: 60vw; top: 80vh;  animation-delay: 5s;  font-size: 8.8rem; color: #00e676; }
+.floating-icons i:nth-child(8) { left: 15vw; top: 50vh;  animation-delay: 7s;  font-size: 7.7rem; color: #ff1744; }
+.floating-icons i:nth-child(9) { left: 80vw; top: 40vh;  animation-delay: 9s;  font-size: 8.2rem; color: #fff176; }
+.floating-icons i:nth-child(10){ left: 30vw; top: 30vh;  animation-delay: 11s; font-size: 7.9rem; color: #00bcd4; }
+
+@keyframes float-variant {
+    0%   { transform: translateY(0) scale(1) rotate(0deg); }
+    25%  { transform: translateY(-60px) scale(1.08) rotate(8deg); }
+    50%  { transform: translateY(-30px) scale(1.12) rotate(-6deg); }
+    75%  { transform: translateY(-50px) scale(1.05) rotate(4deg); }
+    100% { transform: translateY(0) scale(1) rotate(0deg); }
 } 
