@@ -1,12 +1,8 @@
-apiVersion: skaffold/v2beta29
+apiVersion: skaffold/v4beta2
 kind: Config
-build:
-  artifacts:
-  - image: portfolio
-    docker:
-      dockerfile: Dockerfile
-deploy:
-  kubectl:
-    manifests:
+manifests:
+  raw:
     - k8s/deployment.yaml
     - k8s/service.yaml
+deploy:
+  kubectl: {}
