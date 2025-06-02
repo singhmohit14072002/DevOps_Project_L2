@@ -3,11 +3,11 @@ kind: DeliveryPipeline
 metadata:
   name: myportfoliowebsite
   description: My Portfolio Website CI/CD Pipeline
-
-serialPipeline:
-  stages:
-  - targetId: newportfolio-prod
-    profiles: [] # Use default profile (skaffold.yaml)
+spec:
+  serialPipeline:
+    stages:
+    - targetId: newportfolio-prod
+      profiles: [] # Use default profile (skaffold.yaml)
 
 executionConfigs:
 - usages: [RENDER, DEPLOY]
@@ -21,8 +21,8 @@ kind: Target
 metadata:
   name: newportfolio-prod
   description: Production target for newportfolio cluster
-
-gke:
-  cluster: projects/${PROJECT_ID}/locations/asia-east1/clusters/newportfolio
-  requireApproval: false
-  runAs: 622922749626-compute@developer.gserviceaccount.com 
+spec:
+  gke:
+    cluster: projects/${PROJECT_ID}/locations/asia-east1/clusters/newportfolio
+    requireApproval: false
+    runAs: 622922749626-compute@developer.gserviceaccount.com 
