@@ -15,7 +15,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Apply simplified Cloud Deploy configuration (pipeline and target)
+# Apply Cloud Deploy configuration
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -23,18 +23,6 @@ steps:
   - 'apply'
   - '--file=clouddeploy.yaml'
   - '--region=asia-east1'
-  - '--project=$PROJECT_ID'
-
-# Update the pipeline to add executionConfigs using bash
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'deploy'
-  - 'delivery-pipelines'
-  - 'patch'
-  - 'myportfoliowebsite'
-  - '--region=asia-east1'
-  - '--execution-configs=usages=RENDER,DEPLOY,serviceAccount=622922749626-compute@developer.gserviceaccount.com,executionTimeout=3600s'
   - '--project=$PROJECT_ID'
 
 # Create source archive for Cloud Deploy
