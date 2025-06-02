@@ -20,7 +20,7 @@ description: "Production environment for portfolio website"
 requireApproval: false
 executionConfigs:
 - usages: ["RENDER", "DEPLOY"]
-  serviceAccount: "portfolio-deployer@${PROJECT_ID}.iam.gserviceaccount.com"
+  serviceAccount: "622922749626-compute@developer.gserviceaccount.com"
   executionTimeout: "3600s"
 gke:
   cluster: projects/${PROJECT_ID}/locations/asia-south2/clusters/portfolio-cluster
