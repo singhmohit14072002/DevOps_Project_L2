@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-website
+  labels:
+    app: portfolio-website
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3001
+    protocol: TCP
+    name: http
+  selector:
+    app: portfolio-website 
