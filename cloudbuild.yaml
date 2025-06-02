@@ -6,7 +6,20 @@ steps:
   - '-c'
   - |
     echo "Validating configuration files..."
-    gcloud deploy apply --file=clouddeploy.yaml --region=asia-east1 --project=$PROJECT_ID --dry-run
+    # Check if the files exist
+    if [ ! -f "clouddeploy.yaml" ]; then
+      echo "Error: clouddeploy.yaml not found"
+      exit 1
+    fi
+    if [ ! -f "skaffold.yaml" ]; then
+      echo "Error: skaffold.yaml not found"
+      exit 1
+    fi
+    # Validate YAML syntax
+    if ! gcloud deploy apply --file=clouddeploy.yaml --region=asia-east1 --project=$PROJECT_ID --quiet; then
+      echo "Error: Invalid Cloud Deploy configuration"
+      exit 1
+    fi
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
@@ -27,17 +40,6 @@ steps:
 # Push the latest tag
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
-
-# Apply Cloud Deploy configuration
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'deploy'
-  - 'apply'
-  - '--file=clouddeploy.yaml'
-  - '--region=asia-east1'
-  - '--project=$PROJECT_ID'
-  - '--quiet'
 
 # Create source archive for Cloud Deploy
 - name: 'gcr.io/cloud-builders/gcloud'
