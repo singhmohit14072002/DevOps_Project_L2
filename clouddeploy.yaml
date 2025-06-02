@@ -1,0 +1,27 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: portfolio-pipeline
+description: "Portfolio website deployment pipeline"
+serialPipeline:
+  stages:
+  - targetId: portfolio-prod
+    profiles: [prod]
+    strategy:
+      standard:
+        verify: true
+
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: portfolio-prod
+description: "Production environment for portfolio website"
+requireApproval: false
+executionConfigs:
+- usages: ["RENDER", "DEPLOY"]
+  serviceAccount: "portfolio-deployer@${PROJECT_ID}.iam.gserviceaccount.com"
+  executionTimeout: "3600s"
+gke:
+  cluster: projects/${PROJECT_ID}/locations/asia-south2/clusters/portfolio-cluster
+  internalIp: false 

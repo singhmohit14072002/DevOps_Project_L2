@@ -7,7 +7,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA']
 
-# Tag the container image as latest
+# Tag the image as latest
 - name: 'gcr.io/cloud-builders/docker'
   args: ['tag', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
@@ -15,27 +15,17 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Update the deployment in GKE
+# Deploy to Cloud Deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
-  - 'container'
-  - 'clusters'
-  - 'get-credentials'
-  - 'portfolio-cluster'  # Replace with your GKE cluster name
-  - '--zone'
-  - 'asia-south2-a'      # Replace with your cluster zone
-  - '--project'
-  - '$PROJECT_ID'
-
-# Apply the Kubernetes manifests
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: kubectl
-  args:
-  - 'set'
-  - 'image'
-  - 'deployment/portfolio-website'
-  - 'portfolio-website=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
+  - 'deploy'
+  - 'releases'
+  - 'create'
+  - 'rel-$COMMIT_SHA'
+  - '--delivery-pipeline=portfolio-pipeline'
+  - '--region=asia-south2'
+  - '--images=portfolio=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
 
 images:
 - 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
