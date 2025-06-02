@@ -15,19 +15,15 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Create Cloud Deploy configuration
+# Apply Cloud Deploy configuration
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
   - 'deploy'
-  - 'delivery-pipelines'
-  - 'create'
-  - 'myportfoliowebsite'
+  - 'apply'
+  - '--file=clouddeploy.yaml'
   - '--region=asia-east1'
   - '--project=$PROJECT_ID'
-  - '--description=My Portfolio Website CI/CD Pipeline'
-  - '--target=newportfolio-prod'
-  - '--service-account=622922749626-compute@developer.gserviceaccount.com'
 
 # Create source archive for Cloud Deploy
 - name: 'gcr.io/cloud-builders/gcloud'
