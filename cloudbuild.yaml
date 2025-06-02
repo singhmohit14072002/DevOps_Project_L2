@@ -15,6 +15,17 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
+# Create a temporary directory for the source files
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    mkdir -p /workspace/source
+    cp -r k8s/* /workspace/source/
+    cd /workspace/source
+    tar -czf /workspace/source.tar.gz .
+
 # Deploy to Cloud Deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
@@ -26,7 +37,7 @@ steps:
   - '--delivery-pipeline=myportfoliowebsite'
   - '--region=asia-south2'
   - '--images=portfolio=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
-  - '--source=skaffold.yaml'
+  - '--source=/workspace/source.tar.gz'
 
 images:
 - 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
