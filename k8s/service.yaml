@@ -4,6 +4,9 @@ metadata:
   name: portfolio-website
   labels:
     app: portfolio-website
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/load-balancer-type: "Internal"
 spec:
   type: LoadBalancer
   ports:

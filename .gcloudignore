@@ -1,0 +1,11 @@
+.git
+.gitignore
+node_modules/
+npm-debug.log
+.env
+.vscode/
+*.md
+.DS_Store
+k8s/
+cloudbuild.yaml
+.gcloudignore 
