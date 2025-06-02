@@ -15,20 +15,27 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Deploy to GKE
+# Update the deployment in GKE
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
-  - 'run'
-  - 'deploy'
-  - 'portfolio-website'
-  - '--image'
-  - 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
-  - '--region'
-  - 'asia-south2'
-  - '--platform'
-  - 'managed'
-  - '--allow-unauthenticated'
+  - 'container'
+  - 'clusters'
+  - 'get-credentials'
+  - 'portfolio-cluster'  # Replace with your GKE cluster name
+  - '--zone'
+  - 'asia-south2-a'      # Replace with your cluster zone
+  - '--project'
+  - '$PROJECT_ID'
+
+# Apply the Kubernetes manifests
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: kubectl
+  args:
+  - 'set'
+  - 'image'
+  - 'deployment/portfolio-website'
+  - 'portfolio-website=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
 
 images:
 - 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
