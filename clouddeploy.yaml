@@ -27,5 +27,4 @@ metadata:
 gke:
   cluster: projects/coherent-coder-460505-m1/locations/asia-east1/clusters/newportfolio
   internalIp: false
-  requireApproval: false
-  runAs: 622922749626-compute@developer.gserviceaccount.com 
+  requireApproval: false 
