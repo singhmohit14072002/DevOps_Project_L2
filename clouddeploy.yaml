@@ -9,10 +9,11 @@ serialPipeline:
   stages:
   - targetId: newportfolio-prod
     profiles: [] # Use default profile (skaffold.yaml)
-    executionConfigs:
-    - usages: ["RENDER", "DEPLOY"]
-      serviceAccount: "622922749626-compute@developer.gserviceaccount.com"
-      executionTimeout: "3600s"
+
+executionConfigs:
+- usages: ["RENDER", "DEPLOY"]
+  serviceAccount: "622922749626-compute@developer.gserviceaccount.com"
+  executionTimeout: "3600s"
 
 ---
 
