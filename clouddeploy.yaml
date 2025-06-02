@@ -9,15 +9,6 @@ serialPipeline:
   stages:
   - targetId: newportfolio-prod
     profiles: ["prod"]
-    strategy:
-      canary:
-        runtimeConfig:
-          cloudRun:
-            automaticTrafficControl: true
-        canaryDeployment:
-          percentages: [25, 50, 75]
-          interval: "1h"
-          verify: true
 
 executionConfigs:
 - usages: [RENDER, DEPLOY]
