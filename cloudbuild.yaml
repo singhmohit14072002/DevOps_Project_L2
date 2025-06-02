@@ -15,18 +15,13 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Create a temporary directory for the source files
+# Create source archive
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-    mkdir -p /workspace/source
-    cp skaffold.yaml /workspace/source/
-    mkdir -p /workspace/source/k8s
-    cp k8s/*.yaml /workspace/source/k8s/
-    cd /workspace/source
-    tar -czf /workspace/source.tar.gz .
+    tar -czf /workspace/source.tar.gz skaffold.yaml k8s/
 
 # Deploy to Cloud Deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
