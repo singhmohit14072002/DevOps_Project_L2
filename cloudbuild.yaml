@@ -15,30 +15,15 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Create or update the delivery pipeline
+# Apply the delivery pipeline configuration
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
   - 'deploy'
   - 'delivery-pipelines'
-  - 'create'
-  - 'portfolio-pipeline'
+  - 'apply'
+  - '--file=clouddeploy.yaml'
   - '--region=asia-south2'
-  - '--source=clouddeploy.yaml'
-  - '--no-require-approval'
-
-# Create or update the target
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'deploy'
-  - 'targets'
-  - 'create'
-  - 'portfolio-prod'
-  - '--region=asia-south2'
-  - '--cluster=projects/$PROJECT_ID/locations/asia-south2/clusters/portfolio-cluster'
-  - '--source=clouddeploy.yaml'
-  - '--no-require-approval'
 
 # Deploy to Cloud Deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -48,7 +33,7 @@ steps:
   - 'releases'
   - 'create'
   - 'rel-$COMMIT_SHA'
-  - '--delivery-pipeline=portfolio-pipeline'
+  - '--delivery-pipeline=myportfoliowebsite'
   - '--region=asia-south2'
   - '--images=portfolio=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
   - '--source=skaffold.yaml'
