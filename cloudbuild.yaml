@@ -30,7 +30,7 @@ steps:
   - 'deploy'
   - 'releases'
   - 'create'
-  - 'rel-$COMMIT_SHA'
+  - 'rel-${SHORT_SHA}'
   - '--delivery-pipeline=myportfoliowebsite'
   - '--region=asia-south2'
   - '--images=portfolio=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
