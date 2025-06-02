@@ -1,14 +1,4 @@
 steps:
-# Grant necessary IAM permissions
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud projects add-iam-policy-binding coherent-coder-460505-m1 \
-      --member=serviceAccount:622922749626-compute@developer.gserviceaccount.com \
-      --role=roles/container.developer
-
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA', '.']
