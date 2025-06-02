@@ -16,7 +16,7 @@ steps:
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
 # Apply simplified Cloud Deploy configuration (pipeline and target)
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:460.0.0'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
   - 'deploy'
@@ -26,7 +26,7 @@ steps:
   - '--project=$PROJECT_ID'
 
 # Update the pipeline to add executionConfigs
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:460.0.0'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
   - 'deploy'
@@ -46,7 +46,7 @@ steps:
     tar -czf /workspace/source.tar.gz skaffold.yaml k8s/
 
 # Create a new release in Cloud Deploy
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:460.0.0'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
   - 'deploy'
