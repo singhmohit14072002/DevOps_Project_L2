@@ -2,11 +2,22 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: myportfoliowebsite
-  description: My Portfolio Website CI/CD Pipeline
+  annotations:
+    description: "Production pipeline for My Portfolio Website"
+    environment: "production"
 serialPipeline:
   stages:
   - targetId: newportfolio-prod
-    profiles: [] # Use default profile (skaffold.yaml)
+    profiles: ["prod"]
+    strategy:
+      canary:
+        runtimeConfig:
+          cloudRun:
+            automaticTrafficControl: true
+        canaryDeployment:
+          percentages: [25, 50, 75]
+          interval: "1h"
+          verify: true
 
 executionConfigs:
 - usages: [RENDER, DEPLOY]
@@ -19,8 +30,11 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: newportfolio-prod
-  description: Production target for newportfolio cluster
+  annotations:
+    description: "Production target for My Portfolio Website"
+    environment: "production"
 gke:
   cluster: projects/${PROJECT_ID}/locations/asia-east1/clusters/newportfolio
+  internalIp: false
   requireApproval: false
   runAs: 622922749626-compute@developer.gserviceaccount.com 
