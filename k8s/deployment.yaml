@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: portfolio-website
-        image: asia-south2-docker.pkg.dev/coherent-coder-460505-m1/portfolio-docker-repo/portfolio:latest
+        image: portfolio
         imagePullPolicy: Always
         ports:
         - containerPort: 3001
