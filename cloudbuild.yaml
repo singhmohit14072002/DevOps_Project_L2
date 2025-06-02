@@ -15,7 +15,17 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:latest']
 
-# Create source archive
+# Apply Cloud Deploy configuration (pipeline and target)
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'deploy'
+  - 'apply'
+  - '--file=clouddeploy.yaml'
+  - '--region=asia-east1'
+  - '--project=$PROJECT_ID'
+
+# Create source archive for Cloud Deploy
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
@@ -23,7 +33,7 @@ steps:
   - |
     tar -czf /workspace/source.tar.gz skaffold.yaml k8s/
 
-# Deploy to Cloud Deploy
+# Create a new release in Cloud Deploy
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -32,7 +42,7 @@ steps:
   - 'create'
   - 'rel-${SHORT_SHA}'
   - '--delivery-pipeline=myportfoliowebsite'
-  - '--region=asia-south2'
+  - '--region=asia-east1'
   - '--images=portfolio=asia-south2-docker.pkg.dev/$PROJECT_ID/portfolio-docker-repo/portfolio:$COMMIT_SHA'
   - '--source=/workspace/source.tar.gz'
 
