@@ -24,4 +24,5 @@ metadata:
 
 gke:
   cluster: projects/${PROJECT_ID}/locations/asia-east1/clusters/newportfolio
-  serviceAccount: 622922749626-compute@developer.gserviceaccount.com 
+  requireApproval: false
+  runAs: 622922749626-compute@developer.gserviceaccount.com 
