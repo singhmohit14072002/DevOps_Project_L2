@@ -23,6 +23,7 @@ steps:
   - |
     mkdir -p /workspace/source
     cp -r k8s/* /workspace/source/
+    cp skaffold.yaml /workspace/source/
     cd /workspace/source
     tar -czf /workspace/source.tar.gz .
 
