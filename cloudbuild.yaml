@@ -17,7 +17,7 @@ steps:
   - '--image'
   - 'gcr.io/coherent-coder-460505-m1/myportartifacts/portfolio-website:$COMMIT_SHA'
   - '--region'
-  - 'europe-central2'
+  - 'us-central1'
   - '--platform'
   - 'managed'
   - '--allow-unauthenticated'
