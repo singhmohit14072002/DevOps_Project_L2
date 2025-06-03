@@ -13,11 +13,11 @@ steps:
   args:
   - 'run'
   - 'deploy'
-  - 'portfolio-website'
+  - 'portfolio-website1'
   - '--image'
   - 'gcr.io/coherent-coder-460505-m1/myportartifacts/portfolio-website:$COMMIT_SHA'
   - '--region'
-  - 'us-central1'
+  - 'europe-central2'
   - '--platform'
   - 'managed'
   - '--allow-unauthenticated'
