@@ -1,7 +1,0 @@
-apiVersion: skaffold/v4beta2
-kind: Config
-manifests:
-  - k8s/deployment.yaml
-  - k8s/service.yaml
-deploy:
-  kubectl: {}
