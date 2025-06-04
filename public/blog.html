@@ -16,10 +16,10 @@
     <!-- Styles -->
     <link rel="stylesheet" href="blog.css">
     
-    <!-- Firebase SDK v8 -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase SDK v9 (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="floating-icons-container"></div> <!-- Container for floating icons -->
@@ -155,7 +155,15 @@
         <div class="auth-modal-content">
             <span class="close-modal" onclick="closeAuthModal()">&times;</span>
             <h2 id="authModalTitle">Sign In</h2>
-            <form id="authForm" class="auth-form">
+
+            <!-- Method Toggles -->
+            <div class="auth-method-toggle">
+                <button class="toggle-button active" data-method="email">Email/Password</button>
+                <button class="toggle-button" data-method="phone">Mobile Number</button>
+            </div>
+
+            <!-- Email/Password Form -->
+            <form id="authFormEmail" class="auth-form">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" required>
@@ -164,14 +172,42 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" required>
                 </div>
-                <div class="form-group" id="nameGroup" style="display: none;">
+                <div class="form-group" id="nameGroupEmail" style="display: none;">
                     <label for="name">Full Name</label>
                     <input type="text" id="name">
                 </div>
-                <button type="submit" id="authSubmit">Sign In</button>
+                <button type="submit" id="authSubmitEmail">Sign In</button>
             </form>
+
+            <!-- Mobile Number Form -->
+            <div id="authFormPhone" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="phone-name-input">Full Name</label>
+                    <input type="text" id="phone-name-input" placeholder="Enter your name">
+                </div>
+                 <div class="form-group">
+                    <label for="phone-role-input">Role</label>
+                    <input type="text" id="phone-role-input" placeholder="Enter your role">
+                </div>
+                <div class="form-group">
+                    <label for="phone-input">Mobile Number</label>
+                    <input type="tel" id="phone-input" placeholder="e.g., +15551234567" required>
+                </div>
+                 <div class="form-group">
+                     <div id="recaptcha-container"></div> <!-- CAPTCHA will appear here -->
+                </div>
+                <button id="send-otp-button" disabled>Send OTP</button>
+
+                <div class="form-group">
+                    <label for="otp-input">OTP</label>
+                    <input type="text" id="otp-input" placeholder="Enter OTP" disabled required>
+                </div>
+                <button id="verify-otp-button" disabled>Verify OTP</button>
+            </div>
+
             <div class="auth-footer">
-                <p id="authToggle">Don't have an account? <a href="#" onclick="toggleAuthForm()">Sign Up</a></p>
+                <p id="authToggleEmail">Don't have an account? <a href="#" onclick="toggleAuthForm()">Sign Up</a></p>
+                 <p id="authTogglePhone" style="display: none;">Back to <a href="#" onclick="toggleAuthMethod('email')">Email Login</a></p>
             </div>
         </div>
     </div>
