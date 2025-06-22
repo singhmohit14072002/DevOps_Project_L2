@@ -4,7 +4,7 @@ FROM node:20-alpine
 # Set the working directory inside the container to 
 WORKDIR /app
 
-# Update npm to the latest version to patch security vulnerabilities
+# Update npm to the latest version to patch 
 RUN npm install -g npm@latest
 
 # Copy package.json and package-lock.json into the container
