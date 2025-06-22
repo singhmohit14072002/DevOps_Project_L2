@@ -8,6 +8,7 @@ pipeline {
         AWS_ACCOUNT_ID     = '919984817290'
         ECR_REPO_NAME      = 'devops-project-l2'
         TERRAFORM_REPO     = 'https://github.com/singhmohit14072002/DevOps_Project_L2_Terraform.git'
+        EKS_CLUSTER_NAME   = 'devops-project-cluster'
     }
     stages {
         stage('Checkout') {
@@ -39,16 +40,44 @@ pipeline {
                               -v $PWD:/app -w /app hashicorp/terraform:1.10.5 \
                               output -raw sonarqube_dns
                             ''', returnStdout: true).trim()
-                            env.EKS_CLUSTER_NAME = sh(script: '''
-                            docker run --rm \
-                              -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-                              -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-                              -e AWS_DEFAULT_REGION=$AWS_REGION \
-                              -v $PWD:/app -w /app hashicorp/terraform:1.10.5 \
-                              output -raw eks_cluster_name
-                            ''', returnStdout: true).trim()
                         }
                     }
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=devops-project-l2 \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://44.207.2.144:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    env.ECR_IMAGE_URI = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO_NAME}:${env.IMAGE_TAG}"
+                    sh "docker build -t ${env.ECR_IMAGE_URI} ."
+                }
+            }
+        }
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}"
+            }
+        }
+        stage('Push Docker Image to ECR') {
+            steps {
+                withAWS(region: env.AWS_REGION, credentials: 'aws-credentials') {
+                    sh "aws ecr get-login-password --region ${env.AWS_REGION} | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+                    sh "docker push ${env.ECR_IMAGE_URI}"
                 }
             }
         }
@@ -59,16 +88,12 @@ pipeline {
                         dir('k8s-manifests') {
                             git url: 'https://github.com/singhmohit14072002/DevOps_Project_L2_k8s.git', branch: 'main'
                         }
+                        echo "EKS_CLUSTER_NAME: '${env.EKS_CLUSTER_NAME}'"
                         sh "aws eks update-kubeconfig --name ${env.EKS_CLUSTER_NAME} --region ${env.AWS_REGION}"
                         sh "kubectl apply -f k8s-manifests/k8s/deployment.yaml"
                         sh "kubectl apply -f k8s-manifests/k8s/service.yaml"
                     }
                 }
-            }
-        }
-        stage('SonarQube Analysis') {
-            steps {
-                // ... existing code ...
             }
         }
     }
