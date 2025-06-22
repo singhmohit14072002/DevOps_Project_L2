@@ -1,11 +1,8 @@
-# Use an official Node.js 18 image based on Alpine Linux for a small image size
-FROM node:18-alpine
+# Use an official Node.js 20 image based on Alpine Linux for a small image size
+FROM node:20-alpine
 
 # Set the working directory inside the container to 
 WORKDIR /app
-
-# Update npm to the latest version to patch security vulnerabilities
-RUN npm install -g npm@latest
 
 # Copy package.json and package-lock.json (if it exists) into the container
 COPY package*.json ./
