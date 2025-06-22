@@ -69,8 +69,13 @@ pipeline {
             }
         }
         stage('Trivy Image Scan') {
+            environment {
+                TMPDIR = '/var/lib/jenkins/tmp'
+            }
             steps {
-                sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}"
+                sh '''
+                    trivy image --exit-code 1 --severity HIGH,CRITICAL 919984817290.dkr.ecr.us-east-1.amazonaws.com/devops-project-l2:latest
+                '''
             }
         }
         stage('Push Docker Image to ECR') {
