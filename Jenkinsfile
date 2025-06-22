@@ -60,6 +60,13 @@ pipeline {
                 }
             }
         }
+        stage('Docker Cleanup Before Build') {
+            steps {
+                sh '''
+                    docker system prune -af --volumes
+                '''
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -69,6 +76,9 @@ pipeline {
             }
         }
         stage('Trivy Image Scan') {
+            environment {
+                TMPDIR = '/var/lib/jenkins/tmp'
+            }
             steps {
                 sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}"
             }
@@ -94,6 +104,11 @@ pipeline {
                         sh "kubectl apply -f k8s-manifests/k8s/service.yaml"
                     }
                 }
+            }
+        }
+        stage('Clean Jenkins Workspace After Build') {
+            steps {
+                deleteDir()
             }
         }
     }

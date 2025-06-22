@@ -1,8 +1,23 @@
+# Ignore dependencies
 node_modules
 npm-debug.log
+
+# Ignore build output
+dist
+build
+
+# Ignore version control
 .git
-.gitignore
+.hg
+.svn
+
+# Ignore configs and secrets
 .env
+Dockerfile
+.dockerignore
+sonar-project.properties
+
+.gitignore
 .vscode
 *.md
 .DS_Store 
