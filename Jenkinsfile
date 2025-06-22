@@ -83,7 +83,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}
+                    trivy image --exit-code 1 --severity HIGH,CRITICAL $ECR_IMAGE_URI
                 '''
             }
         }
