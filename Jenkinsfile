@@ -26,6 +26,7 @@ pipeline {
                         script {
                             sh '''
                             docker run --rm \
+                              -u $(id -u):$(id -g) \
                               -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
                               -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
                               -e AWS_DEFAULT_REGION=$AWS_REGION \
@@ -34,6 +35,7 @@ pipeline {
                             '''
                             env.SONARQUBE_URL = sh(script: '''
                             docker run --rm \
+                              -u $(id -u):$(id -g) \
                               -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
                               -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
                               -e AWS_DEFAULT_REGION=$AWS_REGION \
@@ -81,7 +83,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    trivy image --exit-code 1 --severity HIGH,CRITICAL 919984817290.dkr.ecr.us-east-1.amazonaws.com/devops-project-l2:latest
+                    trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}
                 '''
             }
         }
@@ -114,4 +116,4 @@ pipeline {
             }
         }
     }
-} 
+}
