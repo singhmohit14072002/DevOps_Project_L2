@@ -1418,5 +1418,38 @@ body {
 }
 
 .follow-button i {
-    margin-right: 0.25rem;
+    margin-right: 8px; /* Space between icon and text */
+}
+
+/* New Floating Social Icons Styles */
+.floating-icons-container {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    color: var(--text-color);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 } 
