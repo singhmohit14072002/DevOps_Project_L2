@@ -48,13 +48,15 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.projectKey=devops-project-l2 \
-                      -Dsonar.sources=. \
-                      -Dsonar.host.url=http://44.207.2.144:9000 \
-                      -Dsonar.login=$SONAR_TOKEN_ID
-                    '''
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=devops-project-l2 \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://44.207.2.144:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
                 }
             }
         }
