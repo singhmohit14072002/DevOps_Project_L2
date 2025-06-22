@@ -7,7 +7,7 @@ WORKDIR /app
 # Update npm to the latest version to patch security vulnerabilities
 RUN npm install -g npm@latest
 
-# Copy package.json and package-lock.json (if it exists) into the container
+# Copy package.json and package-lock.json into the container
 COPY package*.json ./
 
 # Install all project dependencies listed in package.json
