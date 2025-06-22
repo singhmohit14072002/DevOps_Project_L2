@@ -1,7 +1,7 @@
 # Use an official Node.js 18 image based on Alpine Linux for a small image size
 FROM node:18-alpine
 
-# Set the working directory inside the container to /app
+# Set the working directory inside the container to 
 WORKDIR /app
 
 # Copy package.json and package-lock.json (if it exists) into the container
