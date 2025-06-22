@@ -21,13 +21,18 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                dir('terraform-config') {
+                    git url: env.TERRAFORM_REPO, branch: 'main'
+                }
             }
         }
         stage('Prepare Environment') {
+            agent {
+                docker { image 'hashicorp/terraform:1.10.5' }
+            }
             steps {
                 script {
                     dir('terraform-config') {
-                        git url: env.TERRAFORM_REPO, branch: 'main'
                         sh 'terraform init -reconfigure -backend-config="bucket=mohit-terraform-state-bucket-l2" -backend-config="key=terraform.tfstate" -backend-config="region=us-east-1"'
                         env.SONARQUBE_URL = sh(script: 'terraform output -raw sonarqube_dns', returnStdout: true).trim()
                         env.EKS_CLUSTER_NAME = sh(script: 'terraform output -raw eks_cluster_name', returnStdout: true).trim()
