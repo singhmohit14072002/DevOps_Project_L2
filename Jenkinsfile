@@ -53,7 +53,7 @@ pipeline {
                         sonar-scanner \
                           -Dsonar.projectKey=devops-project-l2 \
                           -Dsonar.sources=. \
-                          -Dsonar.host.url=http://44.207.2.144:9000 \
+                          -Dsonar.host.url=http://18.212.67.147:9000 \
                           -Dsonar.login=$SONAR_TOKEN
                         '''
                     }
@@ -80,7 +80,9 @@ pipeline {
                 TMPDIR = '/var/lib/jenkins/tmp'
             }
             steps {
-                sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${env.ECR_IMAGE_URI}"
+                sh '''
+                    trivy image --exit-code 1 --severity HIGH,CRITICAL 919984817290.dkr.ecr.us-east-1.amazonaws.com/devops-project-l2:latest
+                '''
             }
         }
         stage('Push Docker Image to ECR') {
