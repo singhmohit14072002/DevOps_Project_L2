@@ -1,6 +1,6 @@
 # Project Architecture
 
-Here is a diagram of the project architecture:
+Here is a diagram of the project architecture:-
 
 ```mermaid
 graph TD
