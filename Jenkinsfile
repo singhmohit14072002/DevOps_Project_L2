@@ -68,7 +68,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                // ... existing code ...
+                echo 'SonarQube analysis step placeholder.'
             }
         }
     }
