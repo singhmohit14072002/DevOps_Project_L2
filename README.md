@@ -1,34 +1,45 @@
 # Project Architecture
 
-Here is a diagram of the project architecture:-
+### Architecture Diagram
 
 ```mermaid
 graph TD
-    A[Developer] -- "push code" --> B(GitHub);
+    subgraph "AWS Account"
+        subgraph "VPC"
+            subgraph "Public Subnet 1"
+                Jenkins[("EC2: Jenkins Server")];
+            end
+            subgraph "Public Subnet 2"
+                Tools[("EC2: Tools Server<br/>SonarQube, Trivy")];
+                Monitoring[("EC2: Monitoring Server<br/>Prometheus, Grafana")];
+            end
 
-    subgraph ec2["EC2 (JENKINS HOST)"]
-        subgraph jenkins["JENKINS"]
-            C["Docker Engine"];
-            D["Terraform CLI"];
-            E["Trivy (Docker)"];
-            F["SonarQube (Docker)"];
+            subgraph "Private Subnets"
+                EKS[("Amazon EKS Cluster<br/>Worker Nodes")];
+            end
+
+            Jenkins -- "deploys to" --> EKS;
+            EKS -- "sends metrics to" --> Monitoring;
         end
+
+        ECR[("Amazon ECR<br/>Docker Image Registry")];
+        S3[("Amazon S3<br/>Terraform State")];
+        IAM[("IAM Roles<br/>EKS & Node Group Roles")];
+
+        Jenkins -- "pushes image to" --> ECR;
+        EKS -- "pulls image from" --> ECR;
     end
 
-    subgraph awsvpc["AWS VPC"]
-        G["Amazon ECR"];
-        H["Amazon EKS"];
-        I["S3 (Terraform State)"];
+    subgraph "Local Machine / CI Server"
+        Terraform[("Terraform CLI")];
     end
 
-    J[IAM Roles];
-
-    B -- "webhook trigger" --> jenkins;
-    C -- "push image" --> G;
-    D -- "deploy" --> H;
-    G -- "deploy image" --> H;
-    D -- "store state" --> I;
-    ec2 -- "assume roles" --> J;
-    G -- "access control" --> J;
-    H -- "service roles" --> J;
-``` 
+    Terraform -- "provisions" --> VPC;
+    Terraform -- "provisions" --> EKS;
+    Terraform -- "provisions" --> ECR;
+    Terraform -- "provisions" --> Jenkins;
+    Terraform -- "provisions" --> Tools;
+    Terraform -- "provisions" --> Monitoring;
+    Terraform -- "provisions" --> IAM;
+    Terraform -- "stores state in" --> S3;
+```
